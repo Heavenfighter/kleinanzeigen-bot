@@ -11,7 +11,7 @@ import speech_recognition
 from pydub import AudioSegment
 
 from .utils.web_scraping_mixin import Browser, By, Element, WebScrapingMixin
-from .utils import dicts, i18n, loggers
+from .utils import loggers
 
 LOG:Final[loggers.Logger] = loggers.get_logger(__name__)
 
