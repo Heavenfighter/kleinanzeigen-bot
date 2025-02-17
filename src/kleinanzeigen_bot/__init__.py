@@ -16,7 +16,6 @@ import certifi, colorama, nodriver
 from ruamel.yaml import YAML
 from wcmatch import glob
 
-from kleinanzeigen_bot.captcha_solver import CaptchaSolver
 from . import extract, resources, captcha_solver
 from .ads import calculate_content_hash, get_description_affixes
 from .utils import dicts, error_handlers, loggers, misc
