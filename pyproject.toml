@@ -42,6 +42,8 @@ dependencies = [
   "ruamel.yaml",
   "psutil",
   "wcmatch",
+  "SpeechRecognition",
+  "pydub",
 ]
 
 [dependency-groups] # https://peps.python.org/pep-0735/

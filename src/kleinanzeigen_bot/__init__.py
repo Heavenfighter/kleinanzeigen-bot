@@ -16,7 +16,7 @@ import certifi, colorama, nodriver
 from ruamel.yaml import YAML
 from wcmatch import glob
 
-from . import extract, resources
+from . import extract, resources, captcha_solver
 from ._version import __version__
 from .ads import calculate_content_hash, get_description_affixes
 from .utils import dicts, error_handlers, loggers, misc
@@ -771,12 +771,16 @@ class KleinanzeigenBot(WebScrapingMixin):
         # wait for captcha
         #############################
         try:
-            await self.web_find(By.CSS_SELECTOR, "iframe[name^='a-'][src^='https://www.google.com/recaptcha/api2/anchor?']", timeout = 2)
+            captcha_iframe = await self.web_find(By.CSS_SELECTOR, "iframe[name^='a-'][src^='https://www.google.com/recaptcha/api2/anchor?']", timeout = 2)
             LOG.warning("############################################")
             LOG.warning("# Captcha present! Please solve the captcha.")
             LOG.warning("############################################")
             await self.web_scroll_page_down()
-            input(_("Press a key to continue..."))
+
+            solver = captcha_solver.CaptchaSolver(self.browser)
+            if not await solver.solve_captcha(captcha_iframe):
+                LOG.info("Captcha could not be solved, you have to solve it manually.")
+                input(_("Press a key to continue..."))
         except TimeoutError:
             pass
 
