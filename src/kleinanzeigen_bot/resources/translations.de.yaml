@@ -78,6 +78,8 @@ kleinanzeigen_bot/__init__.py:
     " -> SUCCESS: ad published with ID %s": " -> ERFOLG: Anzeige mit ID %s veröffentlicht"
     " -> effective ad meta:": " -> effektive Anzeigen-Metadaten:"
     "Could not set city from location": "Stadt konnte nicht aus dem Standort gesetzt werden"
+    "Captcha could not be solved, you have to solve it manually.": "Captcha konnte nicht automatisch gelöst werden, Sie müssen es manuell lösen."
+    "Press a key to continue...": "Eine Taste drücken um fortzufahren..."
 
   __set_condition:
     "Unable to close condition dialog!": "Kann den Dialog für Artikelzustand nicht schließen!"
