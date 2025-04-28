@@ -547,12 +547,16 @@ class KleinanzeigenBot(WebScrapingMixin):
 
     async def is_logged_in(self) -> bool:
         try:
+            # Checking for default username element
             user_info = await self.web_text(By.ID, "user-email")
-            if self.config["login"]["username"].lower() in user_info.lower():
-                return True
         except TimeoutError:
-            return False
-        return False
+            try:
+                # Sometimes on main page another element identifies logged-in user
+                user_info = await self.web_text(By.XPATH, '//header//*//p[@data-testid="logged-in-user"]')
+            except TimeoutError:
+                return False
+
+        return self.config["login"]["username"].lower() in user_info.lower()
 
     async def delete_ads(self, ad_cfgs:list[tuple[str, dict[str, Any], dict[str, Any]]]) -> None:
         count = 0
