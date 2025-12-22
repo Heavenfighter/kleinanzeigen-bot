@@ -12,7 +12,7 @@ import certifi, colorama, nodriver  # isort: skip
 from ruamel.yaml import YAML
 from wcmatch import glob
 
-from . import extract, resources
+from . import captcha_solver, extract, resources
 from ._version import __version__
 from .model.ad_model import MAX_DESCRIPTION_LENGTH, Ad, AdPartial, calculate_auto_price
 from .model.config_model import Config
@@ -730,7 +730,7 @@ class KleinanzeigenBot(WebScrapingMixin):
     async def check_and_wait_for_captcha(self, *, is_login_page:bool = True) -> None:
         try:
             captcha_timeout = self._timeout("captcha_detection")
-            await self.web_find(By.CSS_SELECTOR,
+            captcha_frame = await self.web_find(By.CSS_SELECTOR,
                                 "iframe[name^='a-'][src^='https://www.google.com/recaptcha/api2/anchor?']", timeout = captcha_timeout)
 
             if not is_login_page and self.config.captcha.auto_restart:
@@ -743,6 +743,11 @@ class KleinanzeigenBot(WebScrapingMixin):
 
             if not is_login_page:
                 await self.web_scroll_page_down()
+                solver = captcha_solver.CaptchaSolver(self.browser)
+                if not await solver.solve_captcha(captcha_frame):
+                    LOG.info("Captcha could not be solved, you have to solve it manually.")
+                else:
+                    return
 
             await ainput(_("Press a key to continue..."))
         except TimeoutError:
